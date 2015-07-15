@@ -30,6 +30,7 @@ This code
 
 ```	objc
 NSDictionary *options = @{
+                          kCRToastLocationKey : @(CRToastLocationTop),
                           kCRToastTextKey : @"Hello World!",
                           kCRToastTextAlignmentKey : @(NSTextAlignmentCenter),
                           kCRToastBackgroundColorKey : [UIColor redColor],
@@ -72,6 +73,7 @@ Title and Subtitle text with:
 
 `CRToast` also allows for animation customization. This includes.
 
+- Location (Top or Bottom)
 - Animation Type (Linear, Spring or Gravity)
 - Animation Physics Coefficients (Spring Damping, Spring Initial Velocity, Gravity Magnitude)
 - Presentation Type (Slide over bars or push content out)
