@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segLocation;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segFromDirection;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segToDirection;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *inAnimationTypeSegmentedControl;
@@ -71,6 +72,7 @@
     self.title = @"CRToast";
     [self updateDurationLabel];
     UIFont *font = [UIFont boldSystemFontOfSize:10];
+    [self.segLocation setTitleTextAttributes:@{NSFontAttributeName : font} forState:UIControlStateNormal];
     [self.segFromDirection setTitleTextAttributes:@{NSFontAttributeName : font}
                                      forState:UIControlStateNormal];
     [self.segToDirection setTitleTextAttributes:@{NSFontAttributeName : font}
@@ -165,6 +167,10 @@
 
 #pragma mark - Overrides
 
+CRToastLocation CRToastLocationFromSegmentedControl(UISegmentedControl *segmentedControl) {
+    return segmentedControl.selectedSegmentIndex == 0 ? CRToastLocationTop : CRToastLocationBottom;
+}
+
 CRToastAnimationType CRToastAnimationTypeFromSegmentedControl(UISegmentedControl *segmentedControl) {
     return segmentedControl.selectedSegmentIndex == 0 ? CRToastAnimationTypeLinear :
            segmentedControl.selectedSegmentIndex == 1 ? CRToastAnimationTypeSpring :
@@ -185,7 +191,8 @@ CRToastAccessoryViewAlignment CRToastViewAlignmentForSegmentedControl(UISegmente
 }
 
 - (NSDictionary*)options {
-    NSMutableDictionary *options = [@{kCRToastNotificationTypeKey               : self.coverNavBarSwitch.on ? @(CRToastTypeNavigationBar) : @(CRToastTypeStatusBar),
+    NSMutableDictionary *options = [@{kCRToastLocationKey                       : @(CRToastLocationFromSegmentedControl(_segLocation)),
+                                      kCRToastNotificationTypeKey               : self.coverNavBarSwitch.on ? @(CRToastTypeNavigationBar) : @(CRToastTypeStatusBar),
                                       kCRToastNotificationPresentationTypeKey   : self.slideOverSwitch.on ? @(CRToastPresentationTypeCover) : @(CRToastPresentationTypePush),
                                       kCRToastUnderStatusBarKey                 : @(self.slideUnderSwitch.on),
                                       kCRToastTextKey                           : self.txtNotificationMessage.text,

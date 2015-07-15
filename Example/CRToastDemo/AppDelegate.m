@@ -10,7 +10,8 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [CRToastManager setDefaultOptions:@{kCRToastNotificationTypeKey : @(CRToastTypeNavigationBar),
+    [CRToastManager setDefaultOptions:@{kCRToastLocationKey         : @(CRToastLocationTop),
+                                        kCRToastNotificationTypeKey : @(CRToastTypeNavigationBar),
                                         kCRToastFontKey             : [UIFont fontWithName:@"HelveticaNeue-Light" size:16],
                                         kCRToastTextColorKey        : [UIColor whiteColor],
                                         kCRToastBackgroundColorKey  : [UIColor orangeColor],
