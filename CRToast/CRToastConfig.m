@@ -176,6 +176,10 @@ NSArray * CRToastGenericRecognizersMake(id target, CRToastInteractionResponder *
 
 #pragma mark - Option Constant Definitions
 
+NSString *const kCRToastLocationKey                         = @"kCRToastLocationKey";
+NSString *const kCRToastLocationTopKey                      = @"kCRToastLocationTopKey";
+NSString *const kCRToastLocationBottomKey                   = @"kCRToastLocationBottomKey";
+
 NSString *const kCRToastNotificationTypeKey                 = @"kCRToastNotificationTypeKey";
 NSString *const kCRToastNotificationPreferredHeightKey      = @"kCRToastNotificationPreferredHeightKey";
 NSString *const kCRToastNotificationPreferredPaddingKey     = @"kCRToastNotificationPreferredPaddingKey";
@@ -234,6 +238,7 @@ NSString *const kCRToastCaptureDefaultWindowKey             = @"kCRToastCaptureD
 
 #pragma mark - Option Defaults
 
+static CRToastLocation               kCRLocationDefault                     = CRToastLocationTop;
 static CRToastType                   kCRNotificationTypeDefault             = CRToastTypeStatusBar;
 static CGFloat                       kCRNotificationPreferredHeightDefault  = 0;
 static CGFloat                       kCRNotificationPreferredPaddingDefault  = 0;
@@ -309,7 +314,10 @@ static NSDictionary *                kCRToastKeyClassMap                    = ni
         kCRBackgroundColorDefault = [[UIApplication sharedApplication] delegate].window.tintColor ?: [UIColor redColor];
         kCRInteractionResponders = @[];
         
-        kCRToastKeyClassMap = @{kCRToastNotificationTypeKey                 : NSStringFromClass([@(kCRNotificationTypeDefault) class]),
+        kCRToastKeyClassMap = @{
+                                kCRToastLocationKey                         : NSStringFromClass([@(kCRLocationDefault) class]),
+                                
+                                kCRToastNotificationTypeKey                 : NSStringFromClass([@(kCRNotificationTypeDefault) class]),
                                 kCRToastNotificationPreferredHeightKey      : NSStringFromClass([@(kCRNotificationPreferredHeightDefault) class]),
                                 kCRToastNotificationPreferredPaddingKey      : NSStringFromClass([@(kCRNotificationPreferredPaddingDefault) class]),
                                 kCRToastNotificationPresentationTypeKey     : NSStringFromClass([@(kCRNotificationPresentationTypeDefault) class]),
@@ -381,6 +389,7 @@ static NSDictionary *                kCRToastKeyClassMap                    = ni
 
 + (void)setDefaultOptions:(NSDictionary*)defaultOptions {
     //TODO Validate Types of Default Options
+    if (defaultOptions[kCRToastLocationKey])                        kCRLocationDefault                      = [defaultOptions[kCRToastLocationKey] integerValue];
     if (defaultOptions[kCRToastNotificationTypeKey])                kCRNotificationTypeDefault              = [defaultOptions[kCRToastNotificationTypeKey] integerValue];
     if (defaultOptions[kCRToastNotificationPreferredHeightKey])     kCRNotificationPreferredHeightDefault   = [defaultOptions[kCRToastNotificationPreferredHeightKey] floatValue];
     if (defaultOptions[kCRToastNotificationPreferredPaddingKey])    kCRNotificationPreferredPaddingDefault  = [defaultOptions[kCRToastNotificationPreferredPaddingKey] floatValue];
@@ -526,6 +535,12 @@ static NSDictionary *                kCRToastKeyClassMap                    = ni
     return _options[kCRToastInteractionRespondersKey] ?
     _gestureRecognizers ?: [self gestureRecognizersForInteractionResponder:_options[kCRToastInteractionRespondersKey]] :
     [self gestureRecognizersForInteractionResponder:kCRInteractionResponders];
+}
+
+- (CRToastLocation)location {
+    return _options[kCRToastLocationKey] ?
+    [self.options[kCRToastLocationKey] integerValue] :
+    kCRLocationDefault;
 }
 
 - (CRToastType)notificationType {

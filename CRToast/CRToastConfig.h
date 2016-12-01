@@ -59,6 +59,14 @@ extern NSString *NSStringFromCRToastInteractionType(CRToastInteractionType inter
                                                   block:(void (^)(CRToastInteractionType interactionType))block;
 @end
 
+/**
+ `CRToastLocation` defines the location of the notification.
+ */
+typedef NS_ENUM(NSInteger, CRToastLocation) {
+    CRToastLocationTop,
+    CRToastLocationBottom
+};
+
 ///--------------------
 /// @name Notification Option Types
 ///--------------------
@@ -129,6 +137,11 @@ typedef NS_ENUM(NSInteger, CRToastAccessoryViewAlignment){
  These are the keys that define the options that can be set for a notifaction. All primitive types mentioned should
  be wrapped as `NSNumber`s or `NSValue`s
  */
+
+/**
+ The location for the notification. Expects type `CRToastLocation`.
+ */
+extern NSString *const kCRToastLocationKey;
 
 /**
  The notification type for the notification. Expects type `CRToastType`.
@@ -397,6 +410,7 @@ extern NSString *const kCRToastCaptureDefaultWindowKey;
 
 //Read Only Convinence Properties Providing Default Values or Values from Options
 
+@property (nonatomic, readonly) CRToastLocation location;
 @property (nonatomic, readonly) CRToastType notificationType;
 @property (nonatomic, assign) CGFloat preferredHeight;
 @property (nonatomic, assign) CGFloat preferredPadding;

@@ -177,27 +177,58 @@ static CGRect CRStatusBarViewFrame(CRToastType type, CRToastAnimationDirection d
 
 #pragma mark - Notification Container Frame
 /// Get the notifications container frame based on orientation & notification size
-static CGRect CRGetNotificationContainerFrame(UIInterfaceOrientation statusBarOrientation, CGSize notificationSize) {
-    CGRect containerFrame = CGRectMake(0, 0, notificationSize.width, notificationSize.height);
+static CGRect CRGetNotificationContainerFrame(CRToastLocation location, UIInterfaceOrientation statusBarOrientation, CGSize notificationSize) {
+    CGRect containerFrame;
+    
+    switch (location) {
+        case CRToastLocationTop:
+            containerFrame = CGRectMake(0, 0, notificationSize.width, notificationSize.height);
 
-    if (!CRFrameAutoAdjustedForOrientation()) {
-        switch (statusBarOrientation) {
-            case UIInterfaceOrientationLandscapeLeft: {
-                containerFrame = CGRectMake(0, 0, notificationSize.height, notificationSize.width);
-                break;
+            if (!CRFrameAutoAdjustedForOrientation()) {
+                switch (statusBarOrientation) {
+                    case UIInterfaceOrientationLandscapeLeft: {
+                        containerFrame = CGRectMake(0, 0, notificationSize.height, notificationSize.width);
+                        break;
+                    }
+                    case UIInterfaceOrientationLandscapeRight: {
+                        containerFrame = CGRectMake(CGRectGetWidth([[UIScreen mainScreen] bounds])-notificationSize.height, 0, notificationSize.height, notificationSize.width);
+                        break;
+                    }
+                    case UIInterfaceOrientationPortraitUpsideDown: {
+                        containerFrame = CGRectMake(0, CGRectGetHeight([[UIScreen mainScreen] bounds])-notificationSize.height, notificationSize.width, notificationSize.height);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+
             }
-            case UIInterfaceOrientationLandscapeRight: {
-                containerFrame = CGRectMake(CGRectGetWidth([[UIScreen mainScreen] bounds])-notificationSize.height, 0, notificationSize.height, notificationSize.width);
-                break;
+            break;
+        case CRToastLocationBottom:
+            containerFrame = CGRectMake(0, CGRectGetHeight([[UIScreen mainScreen] bounds]) - notificationSize.height, notificationSize.width, notificationSize.height);
+            
+            if (!CRFrameAutoAdjustedForOrientation()) {
+                switch (statusBarOrientation) {
+                    case UIInterfaceOrientationLandscapeLeft: {
+                        containerFrame = CGRectMake(0, CGRectGetHeight([[UIScreen mainScreen] bounds]) - notificationSize.height, notificationSize.height, notificationSize.width);
+                        break;
+                    }
+                    case UIInterfaceOrientationLandscapeRight: {
+                        containerFrame = CGRectMake(0, 0, notificationSize.height, notificationSize.width);
+                        break;
+                    }
+                    case UIInterfaceOrientationPortraitUpsideDown: {
+                        containerFrame = CGRectMake(0, 0, notificationSize.width, notificationSize.height);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+                
             }
-            case UIInterfaceOrientationPortraitUpsideDown: {
-                containerFrame = CGRectMake(0, CGRectGetHeight([[UIScreen mainScreen] bounds])-notificationSize.height, notificationSize.width, notificationSize.height);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
+            break;
 
     }
     return containerFrame;
